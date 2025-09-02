@@ -14,6 +14,7 @@ use embedded_svc::http::Headers;
 
 use esp_idf_svc::wifi::AuthMethod;
 use esp_idf_svc::{
+    bt::spp::{self, EspSpp, SppConfig},
     bt::{
         gap::{DiscoveryMode, EspGap},
         reduce_bt_memory, BdAddr, BtClassic, BtDriver,
@@ -32,8 +33,6 @@ use esp_idf_svc::{
 };
 use esp_idf_svc::{hal::prelude::Peripherals, http::server::Configuration};
 
-use espidf::spp::{self, EspSpp, SppConfig};
-
 use log::*;
 use spp_handler::SppHandler;
 
@@ -44,7 +43,7 @@ use error::{start_led_blink, ErrorInd, LedBlink};
 mod bt;
 mod elm327;
 mod error;
-mod espidf;
+// mod espidf;
 mod spp_handler;
 
 // OBDLink MX+ mac
@@ -63,9 +62,10 @@ const SSID: &str = "OBD-ESPWIFI";
 /// start servicing ELM327 requests.
 fn main() -> Result<()> {
     esp_idf_svc::sys::link_patches();
-    esp_idf_svc::log::EspLogger::initialize_default();
+    // esp_idf_svc::log::EspLogger::initialize_default();
+    esp_idf_svc::log::init(LevelFilter::Debug);
 
-    esp_idf_svc::log::set_target_level("esp_dev", LevelFilter::Debug)?;
+    // esp_idf_svc::log::set_target_level("esp_dev", LevelFilter::Debug)?;
     // esp_idf_svc::log::set_target_level("esp_dev::espidf::spp", LevelFilter::Debug)?;
     // esp_idf_svc::log::set_target_level("esp_dev::spp_handler", LevelFilter::Debug)?;
     // esp_idf_svc::log::set_target_level("esp_dev::elm327", LevelFilter::Debug)?;

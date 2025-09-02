@@ -1,5 +1,6 @@
 use circular_buffer::CircularBuffer;
 use esp_idf_svc::{
+    bt::spp::{self, EspSpp, SppEvent},
     bt::{BtClassicEnabled, BtDriver},
     nvs::{EspNvs, NvsDefault},
     sys::EspError,
@@ -18,10 +19,7 @@ use std::{
 
 use anyhow::Result;
 
-use crate::{
-    error::LedBlink,
-    spp::{self, EspSpp, SppEvent},
-};
+use crate::error::LedBlink;
 use crate::{BD_ADDR, NVS_DISC_FAIL_COUNT};
 use log::*;
 
@@ -54,8 +52,7 @@ where
 {
     /// Write some data to the OBDLink. Will not block.
     fn write(&mut self, buf: &[u8]) -> io::Result<usize> {
-        self.extend_write_buf(buf)
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+        self.extend_write_buf(buf).map_err(io::Error::other)?;
         self.flush()?;
 
         Ok(buf.len())

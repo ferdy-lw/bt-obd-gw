@@ -2,7 +2,7 @@
  
 This ESP Connects to a BT classic OBD dongle, OBDLink MX+, using SPP (serial port profile) and starts an HTTP post endpoint that allows the caller to send commands to the OBD port.
 
-This is part of a car dashboard, specifically for a Promaster van, that uses an LCD to show engine temperatures and other OBD pid data. The LCD is a Waveshare 5" ESP32 s3, which does not support BT classic, unlike the ESP32 which supports both classic and BLE. 
+This is part of a [car dashboard](https://github.com/ferdy-lw/pm-guage), specifically for a Promaster van, that uses an LCD to show engine temperatures and other OBD pid data. The LCD is a Waveshare 5" ESP32 s3, which does not support BT classic, unlike the ESP32 which supports both classic and BLE. 
 Instead of buying a new dongle with BLE and incorporating the OBD logic into the LCD/s3 this gateway was written so the s3 could talk to the MX+.
   
 There will be some delay with hops over http to BT and the occasional connection issues but high speed isn't really an issue, only the temperature pids are sub second and other data is only requested every few seconds to few minutes.
@@ -13,8 +13,7 @@ The project is built using the rust wrappers `esp-idf-svc` on a ESP32 wroom dev 
 
 ## esp-idf-svc and SPP
 
-BT classic support in esp-idf-svc does not include SPP. I've added the spp module based on the existing esp-idf-svc a2dp, hfp and avrc structs but that required pulling in some support code that is private. 
-I'll try to add a PR for esp-idf-svc that adds the spp module so all the code under `espidf` can go away.
+BT classic support in esp-idf-svc does not include SPP. I've [added the spp module](https://github.com/ferdy-lw/esp-idf-svc/tree/add-bt-classic-spp) based on the existing esp-idf-svc a2dp, hfp and avrc structs and [opened a PR](https://github.com/esp-rs/esp-idf-svc/pull/606).
 
  ## WIFI
 
