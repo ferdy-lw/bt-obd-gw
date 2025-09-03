@@ -18,7 +18,7 @@ where
 {
     match event {
         GapEvent::DeviceDiscovered { bd_addr, props } => {
-            info!("GAP: Found device: {:?}", bd_addr);
+            info!("GAP: Found device: {bd_addr:?}");
 
             for prop in props {
                 info!("Prop: {:?}", prop.prop());

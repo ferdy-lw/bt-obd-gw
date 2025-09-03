@@ -187,8 +187,7 @@ pub fn handle_spp<'d, M, T>(
         } => {
             if status == spp::Status::Success {
                 debug!(
-                    "Event: DisComp, scn_num ({scn_num}), scn ({:?}), service_name ({:?})",
-                    scn, service_name
+                    "Event: DisComp, scn_num ({scn_num}), scn ({scn:?}), service_name ({service_name:?})"
                 );
 
                 if let Err(err) = spp.connect(
@@ -200,7 +199,7 @@ pub fn handle_spp<'d, M, T>(
                     error!("Event: DisComp failed to dispatch spp.connect, {err}")
                 }
             } else {
-                error!("Event: DisComp FAILED, status {:?}", status);
+                error!("Event: DisComp FAILED, status {status:?}");
 
                 // Panic so we can try discover again, but only do this a few times so we don't go into a
                 // boot loop
@@ -249,7 +248,7 @@ pub fn handle_spp<'d, M, T>(
                     }
                 }
             } else {
-                error!("Event: Open FAILED, status {:?}", status);
+                error!("Event: Open FAILED, status {status:?}");
             }
         }
         SppEvent::DataInd {
@@ -259,7 +258,7 @@ pub fn handle_spp<'d, M, T>(
             data,
         } => {
             if status == spp::Status::Success {
-                debug!("Event: DataInd, handle ({handle}), data ({:?})", data);
+                debug!("Event: DataInd, handle ({handle}), data ({data:?})");
 
                 let (read_buf, cvar) = read_buf;
 
@@ -289,7 +288,7 @@ pub fn handle_spp<'d, M, T>(
                 read_buf.available = true;
                 cvar.notify_all();
             } else {
-                error!("Event: DataInd FAILED, status {:?}", status);
+                error!("Event: DataInd FAILED, status {status:?}");
             }
         }
         SppEvent::Write {
@@ -363,7 +362,7 @@ pub fn handle_spp<'d, M, T>(
                     }
                 }
             } else {
-                error!("Event: Cong FAILED, status {:?}", status);
+                error!("Event: Cong FAILED, status {status:?}");
             }
         }
         SppEvent::Close {
@@ -375,7 +374,7 @@ pub fn handle_spp<'d, M, T>(
             if status == spp::Status::Success {
                 debug!("Event: Close, handle {handle}, port_status {port_status}, async {async_}");
             } else {
-                error!("Event: Close FAILED, status {:?}", status);
+                error!("Event: Close FAILED, status {status:?}");
             }
 
             rem_handle.store(0, atomic::Ordering::Relaxed);

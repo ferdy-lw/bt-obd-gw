@@ -90,7 +90,7 @@ where
             let bytes_read = match self.port.read(&mut buf) {
                 Ok(n) => n,
                 Err(err) => {
-                    trace!("Read error {:?}", err);
+                    trace!("Read error {err:?}");
                     Err(ReadObdError::IOError(err)).context("read data")?
                 }
             };
