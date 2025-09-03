@@ -1,5 +1,4 @@
 use std::{
-    cell::RefCell,
     net::Ipv4Addr,
     sync::{Arc, Mutex},
     thread,
@@ -12,7 +11,6 @@ use elm327::Elm327;
 
 use embedded_svc::http::Headers;
 
-use esp_idf_svc::wifi::AuthMethod;
 use esp_idf_svc::{
     bt::spp::{self, EspSpp, SppConfig},
     bt::{
@@ -31,7 +29,8 @@ use esp_idf_svc::{
     },
     wifi::{self, BlockingWifi, EspWifi},
 };
-use esp_idf_svc::{hal::prelude::Peripherals, http::server::Configuration};
+use esp_idf_svc::{hal::peripheral::Peripheral, wifi::AuthMethod};
+use esp_idf_svc::{hal::peripherals::Peripherals, http::server::Configuration};
 
 use log::*;
 use spp_handler::SppHandler;
@@ -84,9 +83,9 @@ fn main() -> Result<()> {
 
     let led_blink = start_led_blink(led);
 
-    let modem = RefCell::new(peripherals.modem);
+    let (wifi_modem, mut bt_modem) = peripherals.modem.split();
 
-    reduce_bt_memory(modem.borrow_mut())?;
+    reduce_bt_memory(unsafe { bt_modem.clone_unchecked() })?;
 
     // unsafe {
     //     heap_caps_print_heap_info(MALLOC_CAP_DEFAULT);
@@ -111,7 +110,7 @@ fn main() -> Result<()> {
     //-----------
     // BLUETOOTH
     //-----------
-    let driver = BtDriver::<BtClassic>::new(modem.borrow_mut(), Some(nvs.clone()))?;
+    let driver = BtDriver::<BtClassic>::new(bt_modem, Some(nvs.clone()))?;
 
     driver.set_device_name("OBD-ESP32")?;
 
@@ -197,7 +196,7 @@ fn main() -> Result<()> {
     // Start/Connect WIFI
     //--------------------
     let mut wifi = BlockingWifi::wrap(
-        EspWifi::new(modem.borrow_mut(), sys_loop.clone(), Some(nvs.clone()))?,
+        EspWifi::new(wifi_modem, sys_loop.clone(), Some(nvs.clone()))?,
         sys_loop,
     )?;
 

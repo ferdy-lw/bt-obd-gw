@@ -54,4 +54,4 @@ num_enum = { version = "0.7", default-features = false }
 embuild = "0.33"
 
 [patch.crates-io]
-esp-idf-svc = { git = "https://github.com/ferdy-lw/esp-idf-svc.git", branch = "add-bt-classic-spp"}
+esp-idf-svc = { git = "https://github.com/esp-rs/esp-idf-svc.git" }

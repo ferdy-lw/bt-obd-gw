@@ -13,7 +13,7 @@ The project is built using the rust wrappers `esp-idf-svc` on a ESP32 wroom dev 
 
 ## esp-idf-svc and SPP
 
-BT classic support in esp-idf-svc does not include SPP. I've [added the spp module](https://github.com/ferdy-lw/esp-idf-svc/tree/add-bt-classic-spp) based on the existing esp-idf-svc a2dp, hfp and avrc structs and [opened a PR](https://github.com/esp-rs/esp-idf-svc/pull/606).
+BT classic support in esp-idf-svc now includes SPP in the master [branch](https://github.com/esp-rs/esp-idf-svc/pull/606).
 
  ## WIFI
 
